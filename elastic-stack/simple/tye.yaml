@@ -1,0 +1,46 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+# define multiple services here
+services:
+- name: elasticsearch
+  image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+  bindings:
+  - port: 9200
+    containerPort: 9200
+    protocol: http
+    name: http
+  - port: 9300
+    containerPort: 9300
+    protocol: https
+    name: https
+  env:
+  - name: discovery.type
+    value: single-node
+  - name: ES_JAVA_OPTS
+    value: -Xms512m -Xmx512m
+  volumes:
+  - source: .data/elasticsearch
+    target: /usr/share/elasticsearch/data
+
+- name: kibana
+  image: docker.elastic.co/kibana/kibana:7.12.0
+  bindings:
+  - port: 5601
+    containerPort: 5601
+    protocol: http
+  env:
+  - name: ELASTICSEARCH_HOSTS
+    value: http://elasticsearch:9200
+  - name: SERVER_HOST
+    value: 0.0.0.0
+  volumes:
+  - source: kibana.yml
+    target: /usr/share/kibana/config/kibana.yml

@@ -1,0 +1,33 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+services:
+- name: rabbitmq
+  image: rabbitmq:3-management-alpine
+  bindings:
+  - name: data
+    port: 5672
+    containerPort: 5672
+    protocol: http
+    connectionString: amqp://admin:admin123@${host}:${port}
+  - name: ui
+    port: 15672
+    containerPort: 15672
+    protocol: http
+  env:
+  - name: RABBITMQ_DEFAULT_USER
+    value: admin
+  - name: RABBITMQ_DEFAULT_PASS
+    value: admin123
+  volumes:
+  - source: .data/rabbitmq/data
+    target: /var/lib/rabbitmq/
+  - source: .data/rabbitmq/logs
+    target: /var/log/rabbitmq
