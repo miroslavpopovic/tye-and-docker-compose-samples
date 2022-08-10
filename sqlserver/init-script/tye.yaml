@@ -1,0 +1,21 @@
+﻿# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+- name: sqlserver
+  dockerFile: ./Dockerfile
+  dockerFileContext: .
+  bindings:
+  - name: http
+    port: 1433
+    containerPort: 1433
+    connectionString: Server=${host};Database=App;User Id=AppLogin;Password=AppPassword123;
+  volumes:
+  - source: .data/sqlserver
+    target: /var/opt/mssql/data

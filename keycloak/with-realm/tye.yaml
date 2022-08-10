@@ -1,0 +1,29 @@
+﻿# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+- name: keycloak
+  image: jboss/keycloak:latest
+  bindings:
+  - name: http
+    protocol: http
+    port: 8080
+    containerPort: 8080
+  env:
+  - name: KEYCLOAK_USER
+    value: admin
+  - name: KEYCLOAK_PASSWORD
+    value: admin
+  - name: KEYCLOAK_IMPORT
+    value: /tmp/dev-realm.json
+  volumes:
+  - source: .data/keycloak
+    target: /opt/jboss/keycloak/standalone/data/
+  - source: dev-realm.json
+    target: /tmp/dev-realm.json

@@ -27,6 +27,10 @@ services:
   - name: RABBITMQ_DEFAULT_PASS
     value: admin123
   volumes:
+  - source: rabbitmq.conf
+    target: /etc/rabbitmq/rabbitmq.conf
+  - source: definitions.json
+    target: /etc/rabbitmq/definitions.json
   - source: .data/rabbitmq/data
     target: /var/lib/rabbitmq/
   - source: .data/rabbitmq/logs

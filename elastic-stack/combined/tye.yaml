@@ -1,0 +1,36 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+services:
+- name: elk
+  image: sebp/elk
+  bindings:
+  - port: 9200
+    containerPort: 9200
+    protocol: http
+    name: elasticsearch
+  - port: 5601
+    containerPort: 5601
+    protocol: http
+    name: kibana
+  - port: 5044
+    containerPort: 5044
+    protocol: http
+    name: logstash
+  env:
+  - name: ES_JAVA_OPTS
+    value: -Xms512m -Xmx512m
+  - name: MAX_MAP_COUNT
+    value: 262144
+  volumes:
+  - source: .data/elk
+    target: /var/lib/elasticsearch
+  - source: elasticsearch.yml
+    target: /etc/elasticsearch/elasticsearch.yml
