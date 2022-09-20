@@ -1,0 +1,41 @@
+﻿# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+# define global settings here
+# name: exampleapp # application name
+# registry: exampleuser # dockerhub username or container registry hostname
+
+# define multiple services here
+services:
+  - name: mongo
+    image: mongo:latest
+    bindings:
+      - port: 27017
+        containerPort: 27017
+        protocol: http
+        name: http
+    env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: root
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        value: Password1
+    volumes:
+      - source: .data/mongodb
+        target: /data/db
+
+  - name: mongo-express
+    image: mongo-express:latest
+    bindings:
+      - port: 8081
+        containerPort: 8081
+        protocol: http
+    env:
+      - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+        value: root
+      - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+        value: Password1
+      - name: ME_CONFIG_MONGODB_URL
+        value: mongodb://root:Password1@mongo:27017/
