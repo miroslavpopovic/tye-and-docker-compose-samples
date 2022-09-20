@@ -8,6 +8,7 @@
 # name: exampleapp # application name
 # registry: exampleuser # dockerhub username or container registry hostname
 
+services:
 - name: sqlserver
   dockerFile: ./Dockerfile
   dockerFileContext: .
